@@ -5,3 +5,19 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+class seed
+
+  def self.begin
+    seed = Seed.new
+    seed.generate_destinations   
+  end
+
+  def generate_destinations
+    30.times do |i|
+      destination = Destination.create!(
+        city:
+        country:
+        description:
+      )
+
+end 
