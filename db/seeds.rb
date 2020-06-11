@@ -5,19 +5,50 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
-class seed
 
+
+Destination.destroy_all
+User.destroy_all
+Review.destroy_all
+
+class Seed
   def self.begin
-    seed = Seed.new
-    seed.generate_destinations   
+    Seed.generate_users
+    Seed.generate_destinations_and_reviews   
   end
 
-  def generate_destinations
-    30.times do |i|
-      destination = Destination.create!(
-        city:
-        country:
-        description:
+  def self.generate_users
+    10.times do |i|
+      user = User.create!(
+        email: "#{i}#{Faker::Internet.email}",
+        password: 'password',
+        password_confirmation: 'password'
       )
+    end
+  end
 
+  def self.generate_destinations_and_reviews
+    @first = User.first.id
+    @last = @first + User.count
+
+    5.times do |i|
+    @destination = Destination.create!(
+      city: Faker::Nation.capital_city,
+      country: Faker::Address.country,
+      description: Faker::Hipster.paragraph(sentence_count: 3)
+    )
+
+      3.times do |i|
+        review = Review.create!(
+          user_id: rand(@first...@last),
+          destination_id: @destination.id,
+          content: Faker::Hipster.paragraph(sentence_count: 2)
+        )
+      end
+    end
+  end
 end 
+
+Seed.begin
+
+p "Created #{User.count} users, #{Destination.count} destinations & #{Review.count} reviews"
